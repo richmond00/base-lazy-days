@@ -13,25 +13,31 @@ import { Treatments } from "@/components/treatments/Treatments";
 import { Signin } from "@/components/user/Signin";
 import { UserProfile } from "@/components/user/UserProfile";
 import { theme } from "@/theme";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/react-query/queryClient";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export function App() {
   return (
     <ChakraProvider theme={theme}>
-      <AuthContextProvider>
-        <Loading />
-        <BrowserRouter>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/Staff" element={<AllStaff />} />
-            <Route path="/Calendar" element={<Calendar />} />
-            <Route path="/Treatments" element={<Treatments />} />
-            <Route path="/signin" element={<Signin />} />
-            <Route path="/user/:id" element={<UserProfile />} />
-          </Routes>
-        </BrowserRouter>
-        <ToastContainer />
-      </AuthContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContextProvider>
+          <Loading />
+          <BrowserRouter>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/Staff" element={<AllStaff />} />
+              <Route path="/Calendar" element={<Calendar />} />
+              <Route path="/Treatments" element={<Treatments />} />
+              <Route path="/signin" element={<Signin />} />
+              <Route path="/user/:id" element={<UserProfile />} />
+            </Routes>
+          </BrowserRouter>
+          <ToastContainer />
+        </AuthContextProvider>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
     </ChakraProvider>
   );
 }
