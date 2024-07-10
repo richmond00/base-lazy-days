@@ -17,10 +17,17 @@ function errorHandler(errorMsg: string) {
   }
 }
 export const queryClient = new QueryClient({
-    queryCache: new QueryCache({
-        onError: (error) => {
-            console.log(error);
-            errorHandler(error.message);
-        }
-    })
+  defaultOptions: {
+    queries: {
+      staleTime: 600000,
+      gcTime: 900000,
+      refetchOnWindowFocus: false,
+    }
+  },
+  queryCache: new QueryCache({
+      onError: (error) => {
+          console.log(error);
+          errorHandler(error.message);
+      }
+  })
 });
