@@ -10,6 +10,12 @@ import { axiosInstance } from "@/axiosInstance";
 import { queryKeys } from "@/react-query/constants";
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 
+
+const commonOptions = {
+  staleTime: 0,
+  gcTime: 30000
+}
+
 // for useQuery call
 async function getAppointments(
   year: string,
@@ -59,12 +65,14 @@ export function useAppointments() {
   /** ****************** END 2: filter appointments  ******************** */
   /** ****************** START 3: useQuery  ***************************** */
   // useQuery call for appointments for the current monthYear
+
   const queryclient = useQueryClient();
   useEffect(() => {
     const nextMonthYear = getNewMonthYear(monthYear, 1);
     queryclient.prefetchQuery({
       queryKey: [queryKeys.appointments, nextMonthYear.year, nextMonthYear.month],
-      queryFn: () => getAppointments(nextMonthYear.year,  nextMonthYear.month)
+      queryFn: () => getAppointments(nextMonthYear.year,  nextMonthYear.month),
+      ...commonOptions,
     });
   }, [queryclient, monthYear]);
 
@@ -80,7 +88,10 @@ export function useAppointments() {
   const { data: appointments = fallback } = useQuery({
     queryKey: [queryKeys.appointments, monthYear.year, monthYear.month],
     queryFn: () => getAppointments(monthYear.year, monthYear.month),
-    select: (data) => selectFn(data, showAll)
+    select: (data) => selectFn(data, showAll),
+    refetchOnWindowFocus: true,
+    refetchInterval: 60000,
+    ...commonOptions
   })
 
   /** ****************** END 3: useQuery  ******************************* */
