@@ -34,6 +34,10 @@ export function useUser() {
   // meant to be called from useAuth
   function updateUser(newUser: User): void {
     // TODO: update the user in the query cache
+    queryClient.setQueryData(
+      generateUserKey(userId, userToken),
+      newUser
+    );
   }
 
   // meant to be called from useAuth
