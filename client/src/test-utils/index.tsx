@@ -1,3 +1,4 @@
+import { queryClientOptions } from "@/react-query/queryClient";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render as RtlRender } from "@testing-library/react";
@@ -14,7 +15,8 @@ import { MemoryRouter } from "react-router-dom";
 // };
 
 const generateQueryClient = () => {
-  return new QueryClient();
+  queryClientOptions.defaultOptions.queries.retry = false;
+  return new QueryClient(queryClientOptions);
 }
 
 // reference: https://testing-library.com/docs/react-testing-library/setup#custom-render
